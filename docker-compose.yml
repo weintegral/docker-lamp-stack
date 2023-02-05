@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+    webserver:
+        image: demo-webserver
+        container_name: demo-apache-container
+        depends_on:
+            - database
+        links:
+            -   database
+        build:
+            context: ./
+            dockerfile: WebServerDockerfile
+        ports:
+            - "8080:80"
+        volumes:
+            - .:/var/www/html
+    database:
+        build:
+            context: ./
+            dockerfile: MySQLDockerfile
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: ''
+            MYSQL_ALLOW_EMPTY_PASSWORD : 'yes'
+        restart: always
+        volumes:
+            - database-volume:/var/lib/mysql
+
+volumes:
+    database-volume:
+        driver: "local"
