@@ -21,7 +21,7 @@ services:
             - "8080:80"
     mysql-server:
         image: mysql-server
-        container_name: raptor-mysql
+        container_name: mysql-server
         build:
             context: .
             dockerfile: docker/MySQLDockerfile
