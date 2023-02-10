@@ -1,33 +1,39 @@
-version: '3'
-
+version: "3"
 services:
     webserver:
-        image: demo-webserver
-        container_name: demo-apache-container
-        depends_on:
-            - database
-        links:
-            -   database
+        image: webserver
+        container_name: webserver
         build:
-            context: ./
-            dockerfile: WebServerDockerfile
-        ports:
-            - "8080:80"
+            context: .
+            dockerfile: docker/Dockerfile
+        env_file:
+            - docker/.docker.env
+        environment:
+            CONTAINER_ROLE: app
+            XDEBUG_CONFIG: remote_host=host.docker.internal
+        depends_on:
+            - mysql-server
+        links:
+            - mysql-server
         volumes:
             - .:/var/www/html
-    database:
-        build:
-            context: ./
-            dockerfile: MySQLDockerfile
         ports:
-            - "3306:3306"
-        environment:
-            MYSQL_ROOT_PASSWORD: ''
-            MYSQL_ALLOW_EMPTY_PASSWORD : 'yes'
-        restart: always
+            - "8080:80"
+    mysql-server:
+        image: mysql-server
+        container_name: raptor-mysql
+        build:
+            context: .
+            dockerfile: docker/MySQLDockerfile
         volumes:
-            - database-volume:/var/lib/mysql
-
+            - mysql_data:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: weintegral
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_USER: admin
+            MYSQL_PASSWORD: admin
+        ports:
+            - "33060:3306"
 volumes:
-    database-volume:
+    mysql_data:
         driver: "local"
