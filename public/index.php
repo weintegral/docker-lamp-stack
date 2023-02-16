@@ -1,41 +1,5 @@
 <?php
-
-# string
-$clientName = 'weintegral';
-# integer
-$clientNumber = 123;
-# float
-$clientRatio = 123.456;
-# boolean
-$clientStatus = false;
-
-# simple array
-$listOfClients = [
-    'apple',
-    'microsoft',
-    'meta',
-    'tesla'
-];
-
-# associative array
-$clientInfo = [
-    'name' => 'apple',
-    'location' => 'california',
-    'manufacturing' => 'mobiles',
-    'revenue' => 11111111111.11,
-    'running'=> true
-];
-
-$vendorInfo = new stdClass();
-$vendorInfo->name = 'meta';
-$vendorInfo->product = 'portal';
-
-echo "<pre>";
-print_r($clientInfo);
-echo "<br>";
-die('end of the program');
-
-
+declare(strict_types = 1);
 /**
  * TOPICS that are covered
  *
@@ -78,14 +42,14 @@ try {
 
 $stmt = $pdo->query('SELECT * FROM customers');
 $records = $stmt->fetchAll();
-
-$output = [];
+$output['customers'] = [];
 foreach($records as $record) {
     $customer = [];
     $customer['name'] = $record['customerName'];
     $customer['number']= $record['customerNumber'];
     $customer['firstName']= $record['contactFirstName'];
     $customer['lastName']= $record['contactLastName'];
+
     $output['customers'][] = $customer;
 }
 
