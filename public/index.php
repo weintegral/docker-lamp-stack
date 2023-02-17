@@ -3,6 +3,7 @@ declare(strict_types = 1);
 require 'MySLDatabase.php';
 require 'Customer.php';
 require 'Response.php';
+require 'Office.php';
 
 /**
  * TOPICS that are covered
@@ -26,3 +27,5 @@ $customer = new Customer($database);
 $output = $customer->findAll();
 $response = new Response();
 $response->toJson($output);
+
+
