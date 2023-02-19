@@ -1,8 +1,11 @@
 <?php
 declare(strict_types = 1);
+
+require 'Debug.php';
 //require 'MySQLDatabase.php';
 class Office
 {
+    use Debug;
     private MySQLDatabase $database;
     public function __construct(MySQLDatabase $database)
     {
@@ -14,7 +17,6 @@ class Office
         $pdo = $this->database->getConnection();
         $stmt = $pdo->query('SELECT * FROM offices');
         $records = $stmt->fetchAll();
-        echo '<pre>';
 
         $output['offices'] = [];
         foreach ($records as $record) {
@@ -34,4 +36,16 @@ class Office
 
         return $output;
     }
+
+    public function findById(int $id) : array
+    {
+        $pdo = $this->database->getConnection();
+        $stmt=$pdo->query("SELECT * FROM offices WHERE officeCode = {$id}");
+        $record = $stmt->fetch();
+        $output['officeDdata']=$record;
+
+        return $output;
+
+    }
+
 }

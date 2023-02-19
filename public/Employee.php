@@ -1,7 +1,10 @@
 <?php
 declare(strict_types=1);
+require 'Debug.php';
 class Employee
 {
+
+    use Debug;
     private MySQLDatabase $database;
     public function __construct(MySQLDatabase $database)
     {
@@ -23,6 +26,16 @@ class Employee
 
             $output['employees'][] = $employee;
         }
+
+        return $output;
+    }
+
+    public function findById(int $id): array
+    {
+        $pdo = $this->database->getConnection();
+        $stmt = $pdo->query("SELECT * FROM employees WHERE employeeNumber = {$id}");
+        $record = $stmt->fetch();
+        $output['Employee data'] = $record;
 
         return $output;
     }

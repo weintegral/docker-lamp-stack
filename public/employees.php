@@ -6,6 +6,6 @@ require_once 'Response.php';
 
 $database = new MySQLDatabase();
 $employee = new Employee($database);
-$output = $employee->findAll();
+$output = $employee->findById(1102);
 $response = new Response();
 $response->toJson($output);

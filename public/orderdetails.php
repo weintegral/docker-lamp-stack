@@ -1,14 +1,14 @@
 <?php
 
+
 declare(strict_types=1);
 require 'MySQLDatabase.php';
-require 'Office.php';
+require 'OrderDetail.php';
 require 'Response.php';
 
-//echo 'Printing';
 $database = new MySQLDatabase();
-$office = new Office($database);
-$output = $office->findById(5  );
+$orderrrrr= new OrderDetail($database);
+$output = $orderrrrr->findById(10100);
 $response = new Response();
 
 $response->toJson($output);

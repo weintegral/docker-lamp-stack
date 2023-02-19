@@ -1,9 +1,8 @@
 <?php
 declare(strict_types = 1);
-require 'MySLDatabase.php';
+require 'MySQLDatabase.php';
 require 'Customer.php';
 require 'Response.php';
-require 'Office.php';
 
 /**
  * TOPICS that are covered
@@ -22,9 +21,11 @@ require 'Office.php';
  * HTTP Methods
  * HTTP Status Codes
  */
+
+
 $database = new MySQLDatabase();
 $customer = new Customer($database);
-$output = $customer->findAll();
+$output = $customer->findById(103);
 $response = new Response();
 $response->toJson($output);
 
