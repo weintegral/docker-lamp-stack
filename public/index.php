@@ -21,12 +21,18 @@ require 'Response.php';
  * HTTP Methods
  * HTTP Status Codes
  */
-
-
-$database = new MySQLDatabase();
-$customer = new Customer($database);
-$output = $customer->findById(103);
 $response = new Response();
-$response->toJson($output);
+
+
+try {
+    $database = new MySQLDatabase();
+    $customer = new Customer($database);
+    $output = $customer->findById(103);
+    $response->toJson($output);
+}
+catch (PDOException $exception)
+{
+    $response->toJson(['status' => 'Issue'] );
+}
 
 
