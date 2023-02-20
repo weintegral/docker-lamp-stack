@@ -21,7 +21,6 @@ class Customer
             $customer['number']= $record['customerNumber'];
             $customer['firstName']= $record['contactFirstName'];
             $customer['lastName']= $record['contactLastName'];
-
             $output['customers'][] = $customer;
         }
 
