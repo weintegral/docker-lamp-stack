@@ -2,11 +2,12 @@
 
 trait Debug
 {
-    public function printing($result, $message=''): void
+
+//=======
+    public function dd($var, $message = ''): void
     {
-
-        var_dump($result);
-        die;
+        var_dump($var);
+        die($message);
     }
-
+//>>>>>>> a748f8a82a895f879d1aa5f18f9591087dd612b9
 }

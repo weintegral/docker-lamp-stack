@@ -39,11 +39,40 @@ class Payment
     {
         $pdo = $this->database->getConnection();
         $stmt = $pdo->query("SELECT * FROM payments WHERE customerNumber = {$id}");
-        $records = $stmt->fetch();
-        $output['paymentsInfo']= $records;
+        $record = $stmt->fetch();
+        if (gettype($record) !== 'array') {
+            throw new LogicException('data is not properly retrieved from DB');
+        }
+        $output['OrderDetails data'] = $record;
 
         return $output;
     }
 
+    /**
+     * @throws PDOException
+     */
+    public function insert(array $userData): void
+    {
+        $pdo = $this->database->getConnection();
+        $sql = <<< INSERT_SQL
+            INSERT INTO
+              `payments` (
+                `customerNumber`,
+                `checkNumber`,
+                `paymentDate`,
+                `amount`
+                
+              )
+            VALUES
+              (
+               {$userData['customerNumber']},
+                '{$userData['checkNumber']}',
+                '{$userData['paymentDate']}'
+                
+              );
+INSERT_SQL;
+        $pdo->exec($sql);
+//>>>>>>> a748f8a82a895f879d1aa5f18f9591087dd612b9
+    }
+
 }
-?>

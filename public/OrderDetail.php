@@ -17,7 +17,7 @@ class OrderDetail
         $stmt = $pdo->query('SELECT * FROM orderdetails');
         $records = $stmt->fetchAll();
 
-        $output['orderdetail'] = [];
+        $output['orderDetail'] = [];
         foreach ($records as $record) {
             $orderDetails = [];
             $orderDetails['orderNumber'] = $record['orderNumber'];
@@ -26,7 +26,7 @@ class OrderDetail
             $orderDetails['priceEach'] = $record['priceEach'];
             $orderDetails['orderLineNumber'] = $record['orderLineNumber'];
 
-            $output['orderdetail'][] = $orderDetails;
+            $output['orderDetail'][] = $orderDetails;
         }
 
         return $output;
@@ -37,9 +37,43 @@ class OrderDetail
         $pdo= $this->database->getConnection();
         //print_r('Printed');
         $stmt = $pdo->query("SELECT * FROM orderdetails WHERE orderNumber = {$id}");
-        $records = $stmt->fetch();
-        $output ['orderDetails']=$records;
-        return $output;
+        $record = $stmt->fetch();
+        if (gettype($record) !== 'array') {
+            throw new LogicException('data is not properly retrieved from DB');
+        }
+        $output['OrderDetails data'] = $record;
 
+        return $output;
     }
+
+    /**
+     * @throws PDOException
+     */
+    public function insert(array $userData): void
+    {
+        $pdo = $this->database->getConnection();
+        $sql = <<< INSERT_SQL
+            INSERT INTO
+              `orderdetails` (
+                `orderNumber`,
+                `productCode`,
+                `quantityOrdered`,
+                `priceEach`,
+                `orderLineNumber`
+                
+              )
+            VALUES
+              (
+               {$userData['orderNumber']},
+                '{$userData['productCode']}',
+                '{$userData['quantityOrdered']}',
+               {$userData['priceEach']},
+                '{$userData['orderLineNumber']}'
+                
+              );
+INSERT_SQL;
+        $pdo->exec($sql);
+//>>>>>>> a748f8a82a895f879d1aa5f18f9591087dd612b9
+    }
+
 }

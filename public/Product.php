@@ -38,14 +38,55 @@ class Product
         return $output;
     }
 
-    public function findById(string $id) :array
+    public function findById(string $id): array
     {
         $pdo=$this->database->getConnection();
         $stmt=$pdo->query("SELECT * FROM products WHERE productCode = '{$id}'");
-        $records = $stmt->fetch();
-        $output['productInfo'] = $records;
+        $record = $stmt->fetch();
+        if (gettype($record) !== 'array') {
+            throw new LogicException('data is not properly retrieved from DB');
+        }
+        $output['Product data'] = $record;
 
         return $output;
+    }
+
+    /**
+     * @throws PDOException
+     */
+    public function insert(array $userData): void
+    {
+        $pdo = $this->database->getConnection();
+        $sql = <<< INSERT_SQL
+            INSERT INTO
+              `products` (
+                `productCode`,
+                `productName`,
+                `productLine`,
+                `productScale`,
+                `productVendor`,
+                `productDescription`,
+                `quantityInStock`,
+                `buyPrice`,
+                `MSRP`
+                
+              )
+            VALUES
+              (
+               {$userData['productCode']},
+                '{$userData['productName']}',
+                '{$userData['productLine']}',
+               {$userData['productScale']},
+                '{$userData['productVendor']}',
+                '{$userData['productDescription']}',
+                '{$userData['quantityInStock']}',
+                '{$userData['buyPrice']}',
+                '{$userData['MSRP']}'
+                
+              );
+INSERT_SQL;
+        $pdo->exec($sql);
+//>>>>>>> a748f8a82a895f879d1aa5f18f9591087dd612b9
     }
 
 }
