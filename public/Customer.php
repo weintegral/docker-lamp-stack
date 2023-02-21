@@ -1,10 +1,8 @@
 <?php
 require_once 'MySQLDatabase.php';
-require_once 'Debug.php';
 
 class Customer
 {
-    use Debug;
     private MySQLDatabase $database;
     public function __construct(MySQLDatabase $database)
     {

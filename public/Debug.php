@@ -1,8 +1,8 @@
 <?php
 
-trait Debug
+class Debug
 {
-    public function dd($var, $message = ''): void
+    public static function dd($var, $message = ''): void
     {
         var_dump($var);
         die($message);
