@@ -3,7 +3,6 @@ declare(strict_types=1);
 require 'Debug.php';
 class Product
 {
-    use Debug;
     private MySQLDatabase $database;
 
     public function __construct(MySQLDatabase $database)
