@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 require 'Debug.php';
+
 class Employee
 {
 
-    use Debug;
 
     private MySQLDatabase $database;
 
@@ -25,6 +25,11 @@ class Employee
             $employee['number'] = $record['employeeNumber'];
             $employee['firstName'] = $record['firstName'];
             $employee['lastName'] = $record['lastName'];
+            $employee['extension'] = $record['extension'];
+            $employee['email'] = $record['email'];
+            $employee['officeCode'] = $record['officeCode'];
+            $employee['reportsTo'] = $record['reportsTo'];
+            $employee['jobTitle'] = $record['jobTitle'];
 
             $output['employees'][] = $employee;
         }
