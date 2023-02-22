@@ -1,15 +1,9 @@
 <?php
-require 'Debug.php';
 require_once 'MySQLDatabase.php';
-
+require 'Debug.php';
 class Customer
 {
-//<<<<<<< HEAD
-//=======
-   use Debug;
-//>>>>>>> a748f8a82a895f879d1aa5f18f9591087dd612b9
     private MySQLDatabase $database;
-
     public function __construct(MySQLDatabase $database)
     {
         $this->database = $database;
@@ -21,12 +15,12 @@ class Customer
         $stmt = $pdo->query('SELECT * FROM customers');
         $records = $stmt->fetchAll();
         $output['customers'] = [];
-        foreach ($records as $record) {
+        foreach($records as $record) {
             $customer = [];
             $customer['name'] = $record['customerName'];
-            $customer['number'] = $record['customerNumber'];
-            $customer['firstName'] = $record['contactFirstName'];
-            $customer['lastName'] = $record['contactLastName'];
+            $customer['number']= $record['customerNumber'];
+            $customer['firstName']= $record['contactFirstName'];
+            $customer['lastName']= $record['contactLastName'];
 
             $output['customers'][] = $customer;
         }
@@ -37,11 +31,10 @@ class Customer
     public function findById(int $id): array
     {
         $pdo = $this->database->getConnection();
-//=======
         $stmt = $pdo->query("SELECT * FROM customers WHERE customerNumber = {$id}");
         $record = $stmt->fetch();
         if (gettype($record) !== 'array') {
-          throw new LogicException('data is not properly retrieved from DB');
+            throw new LogicException('data is not properly retrieved from DB');
         }
         $output['data'] = $record;
 
@@ -89,6 +82,5 @@ class Customer
               );
 INSERT_SQL;
         $pdo->exec($sql);
-//>>>>>>> a748f8a82a895f879d1aa5f18f9591087dd612b9
     }
 }
