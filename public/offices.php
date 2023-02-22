@@ -1,35 +1,43 @@
 <?php
+declare(strict_types = 1);
+require_once 'Request.php';
+require_once 'MySQLDatabase.php';
+require_once 'Office.php';
+require_once 'Response.php';
+require_once 'Debug.php';
 
-declare(strict_types=1);
-require 'MySQLDatabase.php';
-require 'Office.php';
-require 'Response.php';
-
+$requestObj = new Request();
 $response = new Response();
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
+if ($requestObj->getRequestType() === 'GET') {
     try {
-        $userProvidedOfficeId = (int)$_GET['officeId'];
+        $urlPath= $requestObj->getRequestPath();
+        $urlPathData = explode( '/', $urlPath);
         $database = new MySQLDatabase();
         $office = new Office($database);
+        if (!isset($urlPathData[2]))
+        {
+            $output = $office->findAll();
+            $response->toJson($output);
+        }
+        $userProvidedOfficeId =(int)$urlPathData[2];
         $output = $office->findById($userProvidedOfficeId);
         $response->toJson($output);
     } catch (PDOException $exception) {
         $response->toJson(['status' => 'Database issue']);
-    }
-    catch (LogicException $exception) {
-        $response->toJson(['status' => 'logic issue']);
+    } catch (InvalidArgumentException $exception) {
+        $response->toJson(['status' => $exception->getMessage()]);
     }
 }
 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($requestObj->getRequestType() === 'POST') {
     try {
-        $json = file_get_contents('php://input');
-        $userProvidedData = (array)json_decode($json);
+        $userProvidedData = $requestObj->getRequestBody();
         $database = new MySQLDatabase();
         $office = new Office($database);
         $office->insert($userProvidedData);
-        $response->toJson(['status' => 'success']);
+        $response->setResponseCode(200)
+            ->toJson(['status' => 'success']);
     } catch (PDOException $exception) {
         $response->toJson(['status' => 'failure']);
     }
