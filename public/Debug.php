@@ -1,10 +1,10 @@
 <?php
 
-trait Debug
+Class Debug
 {
 
 //=======
-    public function dd($var, $message = ''): void
+    public static function dd($var, $message = ''): void
     {
         var_dump($var);
         die($message);
