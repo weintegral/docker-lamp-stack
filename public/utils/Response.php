@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 class Response
 {
@@ -56,9 +57,8 @@ class Response
         header($contentType);
     }
 
-    public function toJson(array $output): void
+    public function toJson(array $output): string
     {
-        echo json_encode($output);
-        die;
+        return json_encode($output);
     }
 }

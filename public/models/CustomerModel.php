@@ -1,12 +1,12 @@
 <?php
-require_once 'MySQLDatabase.php';
 
-class Customer
+class CustomerModel
 {
     private MySQLDatabase $database;
-    public function __construct(MySQLDatabase $database)
+
+    public function __construct()
     {
-        $this->database = $database;
+        $this->database = ObjectContainer::mysqlDB();
     }
 
     public function findAll(): array
@@ -28,6 +28,9 @@ class Customer
         return $output;
     }
 
+    /**
+     * @throws LogicException
+     */
     public function findById(int $id): array
     {
         $pdo = $this->database->getConnection();
