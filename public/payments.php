@@ -1,34 +1,43 @@
 <?php
 declare(strict_types = 1);
+require_once 'Request.php';
 require_once 'MySQLDatabase.php';
 require_once 'Payment.php';
 require_once 'Response.php';
+require_once 'Debug.php';
 
+$requestObj = new Request();
 $response = new Response();
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
+if ($requestObj->getRequestType() === 'GET') {
     try {
-        $userProvidedPayment = (int)$_GET['paymentId'];
+        $urlPath= $requestObj->getRequestPath();
+        $urlPathData = explode( '/', $urlPath);
         $database = new MySQLDatabase();
-        $payments = new Payment($database);
-        $output = $payments->findById($userProvidedPayment);
+        $payment = new Payment($database);
+        if (!isset($urlPathData[2]))
+        {
+            $output = $payment->findAll();
+            $response->toJson($output);
+        }
+        $userProvidedPaymentId =(int)$urlPathData[2];
+        $output = $payment->findById($userProvidedPaymentId);
         $response->toJson($output);
     } catch (PDOException $exception) {
         $response->toJson(['status' => 'Database issue']);
-    }
-    catch (LogicException $exception) {
-        $response->toJson(['status' => 'logic issue']);
+    } catch (InvalidArgumentException $exception) {
+        $response->toJson(['status' => $exception->getMessage()]);
     }
 }
 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($requestObj->getRequestType() === 'POST') {
     try {
-        $json = file_get_contents('php://input');
-        $userProvidedData = (array)json_decode($json);
+        $userProvidedData = $requestObj->getRequestBody();
         $database = new MySQLDatabase();
-        $payments = new Payment($database);
-        $payments->insert($userProvidedData);
-        $response->toJson(['status' => 'success']);
+        $payment = new Payment($database);
+        $payment->insert($userProvidedData);
+        $response->setResponseCode(200)
+            ->toJson(['status' => 'success']);
     } catch (PDOException $exception) {
         $response->toJson(['status' => 'failure']);
     }
