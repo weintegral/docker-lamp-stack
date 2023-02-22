@@ -1,34 +1,43 @@
 <?php
 declare(strict_types = 1);
+require_once 'Request.php';
 require_once 'MySQLDatabase.php';
 require_once 'Product.php';
 require_once 'Response.php';
+require_once 'Debug.php';
 
+$requestObj = new Request();
 $response = new Response();
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
+if ($requestObj->getRequestType() === 'GET') {
     try {
-        $userProvidedProductId = (string)$_GET['productId'];
+        $urlPath= $requestObj->getRequestPath();
+        $urlPathData = explode( '/', $urlPath);
         $database = new MySQLDatabase();
         $product = new Product($database);
+        if (!isset($urlPathData[2]))
+        {
+            $output = $product->findAll();
+            $response->toJson($output);
+        }
+        $userProvidedProductId =(string)$urlPathData[2];
         $output = $product->findById($userProvidedProductId);
         $response->toJson($output);
     } catch (PDOException $exception) {
         $response->toJson(['status' => 'Database issue']);
-    }
-    catch (LogicException $exception) {
-        $response->toJson(['status' => 'logic issue']);
+    } catch (InvalidArgumentException $exception) {
+        $response->toJson(['status' => $exception->getMessage()]);
     }
 }
 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($requestObj->getRequestType() === 'POST') {
     try {
-        $json = file_get_contents('php://input');
-        $userProvidedData = (array)json_decode($json);
+        $userProvidedData = $requestObj->getRequestBody();
         $database = new MySQLDatabase();
         $product = new Product($database);
         $product->insert($userProvidedData);
-        $response->toJson(['status' => 'success']);
+        $response->setResponseCode(200)
+            ->toJson(['status' => 'success']);
     } catch (PDOException $exception) {
         $response->toJson(['status' => 'failure']);
     }
