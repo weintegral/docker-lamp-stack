@@ -6,7 +6,6 @@ class Order
 {
     private MySQLDatabase $database;
 
-    use Debug;
     public function __construct(MySQLDatabase $database)
     {
         $this->database = $database;
