@@ -6,7 +6,6 @@ require_once 'MySQLDatabase.php';
 class Payment
 {
 
-    use Debug;
     private MySQLDatabase $database;
 
     public function __construct(MySQLDatabase $database)
