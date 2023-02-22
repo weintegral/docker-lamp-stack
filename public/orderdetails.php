@@ -1,34 +1,43 @@
 <?php
 declare(strict_types = 1);
+require_once 'Request.php';
 require_once 'MySQLDatabase.php';
 require_once 'OrderDetail.php';
 require_once 'Response.php';
+require_once 'Debug.php';
 
+$requestObj = new Request();
 $response = new Response();
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
+if ($requestObj->getRequestType() === 'GET') {
     try {
-        $userProvidedOrderDetailId = (int)$_GET['orderDetailId'];
+        $urlPath= $requestObj->getRequestPath();
+        $urlPathData = explode( '/', $urlPath);
         $database = new MySQLDatabase();
-        $orderDetail = new OrderDetail($database);
-        $output = $orderDetail->findById($userProvidedOrderDetailId);
+        $orderDetails = new OrderDetail($database);
+        if (!isset($urlPathData[2]))
+        {
+            $output = $orderDetails->findAll();
+            $response->toJson($output);
+        }
+        $userProvidedOrderDetailId =(int)$urlPathData[2];
+        $output = $orderDetails->findById($userProvidedOrderDetailId);
         $response->toJson($output);
     } catch (PDOException $exception) {
         $response->toJson(['status' => 'Database issue']);
-    }
-    catch (LogicException $exception) {
-        $response->toJson(['status' => 'logic issue']);
+    } catch (InvalidArgumentException $exception) {
+        $response->toJson(['status' => $exception->getMessage()]);
     }
 }
 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($requestObj->getRequestType() === 'POST') {
     try {
-        $json = file_get_contents('php://input');
-        $userProvidedData = (array)json_decode($json);
+        $userProvidedData = $requestObj->getRequestBody();
         $database = new MySQLDatabase();
-        $orderDetail = new OrderDetail($database);
-        $orderDetail->insert($userProvidedData);
-        $response->toJson(['status' => 'success']);
+        $orderDetails = new OrderDetail($database);
+        $orderDetails->insert($userProvidedData);
+        $response->setResponseCode(200)
+            ->toJson(['status' => 'success']);
     } catch (PDOException $exception) {
         $response->toJson(['status' => 'failure']);
     }
