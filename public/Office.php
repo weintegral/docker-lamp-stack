@@ -5,7 +5,6 @@ require 'Debug.php';
 //require 'MySQLDatabase.php';
 class Office
 {
-    use Debug;
     private MySQLDatabase $database;
     public function __construct(MySQLDatabase $database)
     {
