@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
-require_once 'Request.php';
 
+require_once 'utils/ObjectContainer.php';
 /**
 * C.R.U.D
 * C: Create (POST)
@@ -28,59 +28,44 @@ require_once 'Request.php';
 * HTTP Status Codes
 */
 
-$requestObj = new Request();
+$requestObj = ObjectContainer::request();
 $isCustomerRequest = str_contains($requestObj->getRequestPath(), 'customers');
+$isEmployeeRequest = str_contains($requestObj->getRequestPath(), 'employees');
+$isOfficeRequest = str_contains($requestObj->getRequestPath(), 'offices');
+$isOrderDetailRequest = str_contains($requestObj->getRequestPath(), 'orderdetails');
+$isOrderRequest = str_contains($requestObj->getRequestPath(), 'orders');
+$isPaymentRequest = str_contains($requestObj->getRequestPath(), 'payments');
+$isProductLineRequest = str_contains($requestObj->getRequestPath(), 'productlines');
+$isProductRequest = str_contains($requestObj->getRequestPath(), 'products');
 
 if($isCustomerRequest) {
-require_once 'customers.php';
+    require_once 'customers.php';
 }
-
-$requestObj = new Request();
-$isEmployeeRequest = str_contains($requestObj->getRequestPath(), 'employees');
 
 if($isEmployeeRequest) {
     require_once 'employees.php';
 }
 
-$requestObj = new Request();
-$isOrderRequest = str_contains($requestObj->getRequestPath(), 'orders');
-
-if($isOrderRequest) {
-    require_once 'orders.php';
+if($isOfficeRequest) {
+    require_once 'offices.php';
 }
-
-$requestObj = new Request();
-$isOrderDetailRequest = str_contains($requestObj->getRequestPath(), 'orderdetails');
 
 if($isOrderDetailRequest) {
     require_once 'orderdetails.php';
 }
 
-$requestObj = new Request();
-$isOfficeRequest = str_contains($requestObj->getRequestPath(), 'offices');
-
-if($isOfficeRequest) {
-    require_once 'offices.php';
+if($isOrderRequest) {
+    require_once 'orders.php';
 }
-
-$requestObj = new Request();
-$isPaymentRequest = str_contains($requestObj->getRequestPath(), 'payments');
 
 if($isPaymentRequest) {
     require_once 'payments.php';
 }
 
-$requestObj = new Request();
-$isProductRequest = str_contains($requestObj->getRequestPath(), 'products');
+if($isProductLineRequest) {
+    require_once 'productlines.php';
+}
 
 if($isProductRequest) {
     require_once 'products.php';
 }
-
-$requestObj = new Request();
-$isProductLinesRequest = str_contains($requestObj->getRequestPath(), 'productlines');
-
-if($isProductLinesRequest) {
-    require_once 'productlines.php';
-}
-
