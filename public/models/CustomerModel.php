@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 class CustomerModel
 {
@@ -85,5 +86,41 @@ class CustomerModel
               );
 INSERT_SQL;
         $pdo->exec($sql);
+    }
+
+    /**
+     * @throws PDOException
+     */
+    public function update(int $id, array $userData): void
+    {
+        $pdo = $this->database->getConnection();
+        $sql = <<< UPDATE_SQL
+            UPDATE `customers` 
+            SET
+                `customerName` = '{$userData['name']}',
+                `contactLastName` = '{$userData['lastName']}',
+                `contactFirstName` = '{$userData['firstName']}',
+                `phone` = '{$userData['phone']}',
+                `addressLine1`= '{$userData['addressLine1']}',
+                `addressLine2` = '{$userData['addressLine2']}',
+                `city` = '{$userData['city']}',
+                `state` = '{$userData['state']}',
+                `postalCode` = {$userData['postalCode']},
+                `country` = '{$userData['country']}',
+                `salesRepEmployeeNumber` = {$userData['salesEmployeeNumber']},
+                `creditLimit` = {$userData['creditLimit']}
+            WHERE `customerNumber` = {$id};
+              ;
+UPDATE_SQL;
+        $pdo->exec($sql);
+    }
+
+    /**
+     * @throws PDOException
+     */
+    public function delete(int $id): void
+    {
+        $pdo = $this->database->getConnection();
+        $pdo->exec("DELETE FROM customers WHERE customerNumber = {$id}");
     }
 }

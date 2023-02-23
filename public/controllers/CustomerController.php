@@ -51,4 +51,38 @@ class CustomerController
             return $this->responseObj->toJson(['status' => $exception->getMessage()]);
         }
     }
+
+    public function updateAction(): string
+    {
+        try {
+            $requestObj = ObjectContainer::request();
+
+            $urlPath= $requestObj->getRequestPath();
+            $urlPathData = explode( '/', $urlPath);
+            $userProvidedCustomerId =(int)$urlPathData[2];
+
+            $userProvidedData = $requestObj->getRequestBody();
+
+            $this->customerModel->update($userProvidedCustomerId, $userProvidedData);
+            return $this->responseObj->setResponseCode(200)
+                ->toJson(['status' => 'success']);
+        } catch (PDOException $exception) {
+            return $this->responseObj->toJson(['status' => $exception->getMessage()]);
+        }
+    }
+
+    public function deleteAction(): string
+    {
+        try {
+            $urlPath= ObjectContainer::request()->getRequestPath();
+            $urlPathData = explode( '/', $urlPath);
+            $userProvidedCustomerId =(int)$urlPathData[2];
+
+            $this->customerModel->delete($userProvidedCustomerId);
+            return $this->responseObj->setResponseCode(200)
+                ->toJson(['status' => 'success']);
+        } catch (PDOException $exception) {
+            return $this->responseObj->toJson(['status' => $exception->getMessage()]);
+        }
+    }
 }

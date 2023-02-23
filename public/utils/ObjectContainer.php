@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
-require_once 'Controllers/CustomerController.php';
-require_once 'Models/CustomerModel.php';
+require_once 'controllers/CustomerController.php';
+require_once 'models/CustomerModel.php';
 require_once 'MySQLDatabase.php';
 require_once 'Response.php';
 require_once 'Request.php';
