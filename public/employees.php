@@ -1,11 +1,21 @@
 <?php
 declare(strict_types = 1);
-require_once 'MySQLDatabase.php';
-require_once 'Employee.php';
-require_once 'Response.php';
 
-$database = new MySQLDatabase();
-$employee = new Employee($database);
-$output = $employee->findAll();
-$response = new Response();
-$response->toJson($output);
+$employeeControllerObj = ObjectContainer::employeeController();
+$requestObj = ObjectContainer::request();
+
+if ($requestObj->getRequestType() === 'GET') {
+    $urlPathData = explode( '/', $requestObj->getRequestPath());
+    if (!isset($urlPathData[2]))
+    {
+        echo $employeeControllerObj->listAction();
+        die;
+    }
+    echo $employeeControllerObj->getByIdAction();
+    die;
+}
+
+if ($requestObj->getRequestType() === 'POST') {
+    echo $employeeControllerObj->createAction();
+    die;
+}
