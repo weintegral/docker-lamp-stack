@@ -1,44 +1,21 @@
 <?php
 declare(strict_types = 1);
-require_once 'Request.php';
-require_once 'MySQLDatabase.php';
-require_once 'Payment.php';
-require_once 'Response.php';
-require_once 'Debug.php';
 
-$requestObj = new Request();
-$response = new Response();
+$paymentControllerObj = ObjectContainer::paymentController();
+$requestObj = ObjectContainer::request();
 
 if ($requestObj->getRequestType() === 'GET') {
-    try {
-        $urlPath= $requestObj->getRequestPath();
-        $urlPathData = explode( '/', $urlPath);
-        $database = new MySQLDatabase();
-        $payment = new Payment($database);
-        if (!isset($urlPathData[2]))
-        {
-            $output = $payment->findAll();
-            $response->toJson($output);
-        }
-        $userProvidedPaymentId =(int)$urlPathData[2];
-        $output = $payment->findById($userProvidedPaymentId);
-        $response->toJson($output);
-    } catch (PDOException $exception) {
-        $response->toJson(['status' => 'Database issue']);
-    } catch (InvalidArgumentException $exception) {
-        $response->toJson(['status' => $exception->getMessage()]);
+    $urlPathData = explode( '/', $requestObj->getRequestPath());
+    if (!isset($urlPathData[2]))
+    {
+        echo $paymentControllerObj->listAction();
+        die;
     }
+    echo $paymentControllerObj->getByIdAction();
+    die;
 }
 
 if ($requestObj->getRequestType() === 'POST') {
-    try {
-        $userProvidedData = $requestObj->getRequestBody();
-        $database = new MySQLDatabase();
-        $payment = new Payment($database);
-        $payment->insert($userProvidedData);
-        $response->setResponseCode(200)
-            ->toJson(['status' => 'success']);
-    } catch (PDOException $exception) {
-        $response->toJson(['status' => 'failure']);
-    }
+    echo $paymentControllerObj->createAction();
+    die;
 }
