@@ -1,11 +1,21 @@
 <?php
 declare(strict_types = 1);
-require_once 'MySQLDatabase.php';
-require_once 'OrderDetail.php';
-require_once 'Response.php';
 
-$database = new MySQLDatabase();
-$orderdetail = new OrderDetail($database);
-$output = $orderdetail->findAll();
-$response = new Response();
-$response->toJson($output);
+$orderdetailControllerObj = ObjectContainer::orderdetailController();
+$requestObj = ObjectContainer::request();
+
+if ($requestObj->getRequestType() === 'GET') {
+    $urlPathData = explode( '/', $requestObj->getRequestPath());
+    if (!isset($urlPathData[2]))
+    {
+        echo $orderdetailControllerObj->listAction();
+        die;
+    }
+    echo $orderdetailControllerObj->getByIdAction();
+    die;
+}
+
+if ($requestObj->getRequestType() === 'POST') {
+    echo $orderdetailControllerObj->createAction();
+    die;
+}
