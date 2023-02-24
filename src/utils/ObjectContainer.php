@@ -1,10 +1,10 @@
 <?php
-declare(strict_types = 1);
-require_once 'controllers/CustomerController.php';
-require_once 'models/CustomerModel.php';
-require_once 'MySQLDatabase.php';
-require_once 'Response.php';
-require_once 'Request.php';
+declare(strict_types=1);
+
+namespace App\utils;
+
+use App\controllers\CustomerController;
+use App\models\CustomerModel;
 
 class ObjectContainer
 {

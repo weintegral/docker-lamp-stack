@@ -1,0 +1,16 @@
+{
+    "name": "weintegral/docker-lamp-stack",
+    "description": "docker LAMP stack",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Gopibabu Srungavarapu"
+        }
+    ],
+    "require": {}
+}

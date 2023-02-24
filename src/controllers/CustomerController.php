@@ -1,5 +1,14 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
+
+namespace App\controllers;
+
+use App\models\CustomerModel;
+use App\utils\ObjectContainer;
+use App\utils\Response;
+use InvalidArgumentException;
+use LogicException;
+use PDOException;
 
 class CustomerController
 {
@@ -27,9 +36,9 @@ class CustomerController
     public function getByIdAction(): string
     {
         try {
-            $urlPath= ObjectContainer::request()->getRequestPath();
-            $urlPathData = explode( '/', $urlPath);
-            $userProvidedCustomerId =(int)$urlPathData[2];
+            $urlPath = ObjectContainer::request()->getRequestPath();
+            $urlPathData = explode('/', $urlPath);
+            $userProvidedCustomerId = (int)$urlPathData[2];
 
             $output = $this->customerModel->findById($userProvidedCustomerId);
             return $this->responseObj->toJson($output);
@@ -57,9 +66,28 @@ class CustomerController
         try {
             $requestObj = ObjectContainer::request();
 
-            $urlPath= $requestObj->getRequestPath();
-            $urlPathData = explode( '/', $urlPath);
-            $userProvidedCustomerId =(int)$urlPathData[2];
+            $urlPath = $requestObj->getRequestPath();
+            $urlPathData = explode('/', $urlPath);
+            $userProvidedCustomerId = (int)$urlPathData[2];
+
+            $userProvidedData = $requestObj->getRequestBody();
+
+            $this->customerModel->update($userProvidedCustomerId, $userProvidedData);
+            return $this->responseObj->setResponseCode(200)
+                ->toJson(['status' => 'success']);
+        } catch (PDOException $exception) {
+            return $this->responseObj->toJson(['status' => $exception->getMessage()]);
+        }
+    }
+
+    public function patchAction(): string
+    {
+        try {
+            $requestObj = ObjectContainer::request();
+
+            $urlPath = $requestObj->getRequestPath();
+            $urlPathData = explode('/', $urlPath);
+            $userProvidedCustomerId = (int)$urlPathData[2];
 
             $userProvidedData = $requestObj->getRequestBody();
 
@@ -74,9 +102,9 @@ class CustomerController
     public function deleteAction(): string
     {
         try {
-            $urlPath= ObjectContainer::request()->getRequestPath();
-            $urlPathData = explode( '/', $urlPath);
-            $userProvidedCustomerId =(int)$urlPathData[2];
+            $urlPath = ObjectContainer::request()->getRequestPath();
+            $urlPathData = explode('/', $urlPath);
+            $userProvidedCustomerId = (int)$urlPathData[2];
 
             $this->customerModel->delete($userProvidedCustomerId);
             return $this->responseObj->setResponseCode(200)

@@ -1,6 +1,11 @@
 <?php
 declare(strict_types=1);
 
+namespace App\utils;
+
+use PDO;
+use PDOException;
+
 class MySQLDatabase
 {
     private string $database;

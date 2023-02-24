@@ -1,5 +1,12 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
+
+namespace App\models;
+
+use App\utils\MySQLDatabase;
+use App\utils\ObjectContainer;
+use LogicException;
+use PDOException;
 
 class CustomerModel
 {
@@ -10,18 +17,21 @@ class CustomerModel
         $this->database = ObjectContainer::mysqlDB();
     }
 
+    /**
+     * @throws PDOException
+     */
     public function findAll(): array
     {
         $pdo = $this->database->getConnection();
         $stmt = $pdo->query('SELECT * FROM customers');
         $records = $stmt->fetchAll();
         $output['customers'] = [];
-        foreach($records as $record) {
+        foreach ($records as $record) {
             $customer = [];
             $customer['name'] = $record['customerName'];
-            $customer['number']= $record['customerNumber'];
-            $customer['firstName']= $record['contactFirstName'];
-            $customer['lastName']= $record['contactLastName'];
+            $customer['number'] = $record['customerNumber'];
+            $customer['firstName'] = $record['contactFirstName'];
+            $customer['lastName'] = $record['contactLastName'];
 
             $output['customers'][] = $customer;
         }
@@ -30,7 +40,7 @@ class CustomerModel
     }
 
     /**
-     * @throws LogicException
+     * @throws LogicException | PDOException
      */
     public function findById(int $id): array
     {
@@ -94,24 +104,47 @@ INSERT_SQL;
     public function update(int $id, array $userData): void
     {
         $pdo = $this->database->getConnection();
-        $sql = <<< UPDATE_SQL
-            UPDATE `customers` 
-            SET
-                `customerName` = '{$userData['name']}',
-                `contactLastName` = '{$userData['lastName']}',
-                `contactFirstName` = '{$userData['firstName']}',
-                `phone` = '{$userData['phone']}',
-                `addressLine1`= '{$userData['addressLine1']}',
-                `addressLine2` = '{$userData['addressLine2']}',
-                `city` = '{$userData['city']}',
-                `state` = '{$userData['state']}',
-                `postalCode` = {$userData['postalCode']},
-                `country` = '{$userData['country']}',
-                `salesRepEmployeeNumber` = {$userData['salesEmployeeNumber']},
-                `creditLimit` = {$userData['creditLimit']}
-            WHERE `customerNumber` = {$id};
-              ;
-UPDATE_SQL;
+        $sql = "UPDATE `customers` SET";
+        if (!empty($userData['name'])) {
+            $sql .= "`customerName` = '{$userData['name']}',";
+        }
+        if (!empty($userData['lastName'])) {
+            $sql .= "`contactLastName` = '{$userData['lastName']}',";
+        }
+        if (!empty($userData['firstName'])) {
+            $sql .= "`contactFirstName` = '{$userData['firstName']}',";
+        }
+        if (!empty($userData['phone'])) {
+            $sql .= "`phone` = '{$userData['phone']}',";
+        }
+        if (!empty($userData['addressLine1'])) {
+            $sql .= "`addressLine1` = '{$userData['addressLine1']}',";
+        }
+        if (!empty($userData['addressLine2'])) {
+            $sql .= "`addressLine2` = '{$userData['addressLine2']}',";
+        }
+        if (!empty($userData['city'])) {
+            $sql .= "`city` = '{$userData['city']}',";
+        }
+        if (!empty($userData['state'])) {
+            $sql .= "`state` = '{$userData['state']}',";
+        }
+        if (!empty($userData['postalCode'])) {
+            $sql .= "`postalCode` = '{$userData['postalCode']}',";
+        }
+        if (!empty($userData['country'])) {
+            $sql .= "`country` = '{$userData['country']}',";
+        }
+        if (!empty($userData['salesEmployeeNumber'])) {
+            $sql .= "`salesRepEmployeeNumber` = '{$userData['salesEmployeeNumber']}',";
+        }
+        if (!empty($userData['creditLimit'])) {
+            $sql .= "`creditLimit` = '{$userData['creditLimit']}',";
+        }
+        $sql = substr($sql, 0, -1);
+        $sql .= "WHERE `customerNumber` = {$id}";
+        $sql .= ';';
+
         $pdo->exec($sql);
     }
 

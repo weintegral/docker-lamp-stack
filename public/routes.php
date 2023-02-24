@@ -1,5 +1,7 @@
 <?php
-require_once 'utils/ObjectContainer.php';
+declare(strict_types = 1);
+
+use App\utils\ObjectContainer;
 
 function getRoutes(): array
 {
@@ -26,7 +28,12 @@ function getRoutes(): array
                 'action' => 'updateAction'
             ],
         ],
-        'PATCH' => [],
+        'PATCH' => [
+            'customers' => [
+                'controller' => ObjectContainer::customerController(),
+                'action' => 'patchAction'
+            ],
+        ],
         'DELETE' => [
             'customers/511' => [
                 'controller' => ObjectContainer::customerController(),

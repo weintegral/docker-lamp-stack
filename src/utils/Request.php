@@ -1,4 +1,7 @@
 <?php
+declare(strict_types=1);
+
+namespace App\utils;
 
 class Request
 {
@@ -20,7 +23,7 @@ class Request
     {
         $serverGlobalVariable = $_SERVER;
         $json = file_get_contents('php://input');
-        $requestBody =  (array)json_decode($json);
+        $requestBody = (array)json_decode($json);
 
         $this->requestType = $serverGlobalVariable['REQUEST_METHOD'];
         $this->host = $serverGlobalVariable['HTTP_HOST'];

@@ -1,6 +1,6 @@
 <?php
 
-namespace Exceptions;
+namespace App\exceptions;
 
 class InvalidTypeException extends \Exception
 {
