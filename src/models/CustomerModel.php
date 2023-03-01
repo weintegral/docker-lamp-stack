@@ -23,8 +23,10 @@ class CustomerModel
     public function findAll(): array
     {
         $pdo = $this->database->getConnection();
+
         $stmt = $pdo->query('SELECT * FROM customers');
         $records = $stmt->fetchAll();
+
         $output['customers'] = [];
         foreach ($records as $record) {
             $customer = [];

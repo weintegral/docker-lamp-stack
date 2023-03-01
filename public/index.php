@@ -1,6 +1,5 @@
 <?php
 declare(strict_types = 1);
-
 /*
 |--------------------------------------------------------------------------
 | Front End Controller
@@ -26,6 +25,7 @@ $requestObj = ObjectContainer::request();
 $routes = getRoutes();
 $isCustomerRequest = str_contains($requestObj->getRequestPath(), 'customers');
 $isEmployeeRequest = str_contains($requestObj->getRequestPath(), 'employees');
+$isMigrationRequest = str_contains($requestObj->getRequestPath(), 'migrations');
 
 /*
 |--------------------------------------------------------------------------
@@ -108,6 +108,6 @@ if($isCustomerRequest) {
 | Serving employee routes
 |--------------------------------------------------------------------------
 */
-if($isEmployeeRequest) {
-    require_once 'employees.php';
+if($isMigrationRequest) {
+    require_once 'migrations.php';
 }

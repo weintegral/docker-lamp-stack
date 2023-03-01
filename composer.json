@@ -12,5 +12,8 @@
             "name": "Gopibabu Srungavarapu"
         }
     ],
-    "require": {}
+    "require": {
+      "ext-curl": "*",
+      "ext-pdo": "*"
+    }
 }
