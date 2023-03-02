@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
 
+use App\utils\ObjectContainer;
 
 
 require '../vendor/autoload.php';
-use App\utils\ObjectContainer;
 require_once 'routes.php';
 require_once 'globalUtils.php';
 
