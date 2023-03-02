@@ -46,7 +46,7 @@ class CustomerModel
     public function findById(int $id): array
     {
         $pdo = $this->database->getConnection();
-        $stmt = $pdo->query("SELECT * FROM customers WHERE customerNumber = {$id}");
+        $stmt = $pdo->query("SELECT * FROM customers WHERE customerNumber = '{$id}'");
         $record = $stmt->fetch();
         if (gettype($record) !== 'array') {
             throw new LogicException('data is not properly retrieved from DB');
@@ -99,7 +99,7 @@ INSERT_SQL;
         $pdo->exec($sql);
     }
     /**
-     * @throws PDOException
+     * @throws PDOException;
      */
     public function update(int $id, array $userData): void
     {
