@@ -5,7 +5,21 @@ declare(strict_types = 1);
 namespace App\utils;
 
 use App\controllers\CustomerController;
+use App\controllers\EmployeeController;
+use App\controllers\OfficeController;
+use App\controllers\OrderController;
+use App\controllers\OrderDetailController;
+use App\controllers\PaymentController;
+use App\controllers\ProductController;
+use App\controllers\ProductLineController;
 use App\models\CustomerModel;
+use App\models\EmployeeModel;
+use App\models\OfficeModel;
+use App\models\OrderDetailModel;
+use App\models\OrderModel;
+use App\models\PaymentModel;
+use App\models\ProductLineModel;
+use App\models\ProductModel;
 
 Class ObjectContainer
 {
@@ -16,6 +30,7 @@ Class ObjectContainer
 
     public static function request(): Request
     {
+        #
         return new Request();
     }
 
