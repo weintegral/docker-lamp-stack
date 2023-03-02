@@ -1,6 +1,11 @@
 <?php
 declare(strict_types=1);
 namespace App\models;
+
+use App\utils\MySQLDatabase;
+use App\utils\ObjectContainer;
+use LogicException;
+use PDOException;
 class OrderModel
 {
     private MySQLDatabase $database;
