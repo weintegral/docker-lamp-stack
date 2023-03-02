@@ -1,8 +1,11 @@
 <?php
 declare(strict_types=1);
 namespace App\models;
-namespace App\models;
-namespace App\models;
+
+use App\utils\MySQLDatabase;
+use App\utils\ObjectContainer;
+use LogicException;
+use PDOException;
 class ProductModel
 {
     private MySQLDatabase $database;
