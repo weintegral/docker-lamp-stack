@@ -26,6 +26,8 @@ class CustomerController
             $output = $this->customerModel->findAll();
             return $this->responseObj->toJson($output);
         } catch (PDOException $exception) {
+            logger($exception->getMessage());
+            logger($exception->getTraceAsString());
             return $this->responseObj->toJson(['status' => $exception->getMessage()]);
         } catch (InvalidArgumentException) {
             return $this->responseObj->toJson(['status' => 'Invalid Argument Exception']);
@@ -56,6 +58,7 @@ class CustomerController
             return $this->responseObj->setResponseCode(201)
                 ->toJson(['status' => 'success']);
         } catch (PDOException $exception) {
+            logger($exception->getMessage());
             return $this->responseObj->toJson(['status' => $exception->getMessage()]);
         }
     }
