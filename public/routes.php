@@ -160,7 +160,40 @@ function getRoutes(): array
                 'action' => 'updateAction'
             ],
         ],
-        'PATCH' => [],
+        'PATCH' => [
+            'customers' => [
+                'controller' => ObjectContainer::customerController(),
+                'action' => 'patchAction'
+                ],
+            'employees' => [
+                'controller' => ObjectContainer::employeeController(),
+                'action' => 'patchAction'
+            ],
+            'offices' => [
+                'controller' => ObjectContainer::officeController(),
+                'action' => 'patchAction'
+            ],
+            'orders' => [
+                'controller' => ObjectContainer::orderController(),
+                'action' => 'patchAction'
+            ],
+            'orderdetails' => [
+                'controller' => ObjectContainer::orderDetailController(),
+                'action' => 'patchAction'
+            ],
+            'payments' => [
+                'controller' => ObjectContainer::paymentController(),
+                'action' => 'patchAction'
+            ],
+            'products' => [
+                'controller' => ObjectContainer::productController(),
+                'action' => 'patchAction'
+            ],
+            'productlines' => [
+                'controller' => ObjectContainer::productLineController(),
+                'action' => 'patchAction'
+            ],
+        ],
         'DELETE' => [
             'customers/511' => [
                 'controller' => ObjectContainer::customerController(),
