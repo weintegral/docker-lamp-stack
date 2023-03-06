@@ -3,7 +3,6 @@
 namespace App\migrations;
 
 use App\utils\MySQLDatabase;
-use App\utils\ObjectContainer;
 
 class BaseMigration
 {
@@ -11,7 +10,12 @@ class BaseMigration
 
     public function __construct()
     {
-        $this->database = ObjectContainer::mysqlDB();
+        $this->database = new MySQLDatabase(
+            $database = 'school',
+            $host = 'mysql-server',
+            $username = 'root',
+            $password = 'root'
+        );
     }
 
     protected function exec(string $sql): int

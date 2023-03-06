@@ -1,1 +1,2 @@
-PDO::exec(): Argument #1 ($statement) cannot be empty
+PDO::exec(): Argument #1 ($statement) cannot be emptySQLSTATE[42000]: Syntax error or access violation: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'PRIMARY KEY (id)
+            )' at line 6
