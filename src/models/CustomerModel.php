@@ -3,29 +3,19 @@ declare(strict_types=1);
 
 namespace App\models;
 
-use App\utils\MySQLDatabase;
-use App\utils\ObjectContainer;
 use LogicException;
 use PDOException;
 
-class CustomerModel
+class CustomerModel extends BaseModel
 {
-    private MySQLDatabase $database;
-
-    public function __construct()
-    {
-        $this->database = ObjectContainer::mysqlDB();
-    }
 
     /**
      * @throws PDOException
      */
     public function findAll(): array
     {
-        $pdo = $this->database->getConnection();
-
-        $stmt = $pdo->query('SELECT * FROM customers');
-        $records = $stmt->fetchAll();
+        $procedureName ="call GetAllCustomers()";
+        $records = $this->executeGetStoredProcedure($procedureName);
 
         $output['customers'] = [];
         foreach ($records as $record) {
