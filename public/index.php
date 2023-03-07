@@ -3,10 +3,10 @@ declare(strict_types = 1);
 
 use App\utils\ObjectContainer;
 
-
 require '../vendor/autoload.php';
 require_once 'routes.php';
 require_once 'globalUtils.php';
+
 
 $requestObj = ObjectContainer::request();
 $routes = getRoutes();
@@ -18,6 +18,8 @@ $isOrderDetailRequest = str_contains($requestObj->getRequestPath(), 'orderdetail
 $isPaymentRequest = str_contains($requestObj->getRequestPath(), 'payments');
 $isProductRequest = str_contains($requestObj->getRequestPath(), 'products');
 $isProductLinesRequest = str_contains($requestObj->getRequestPath(), 'productlines');
+$isMigrationRequest = str_contains($requestObj->getRequestPath(), 'migrations');
+
 
 //CustomerRequest
 if($isCustomerRequest) {
@@ -391,4 +393,8 @@ if($isProductLinesRequest) {
         echo call_user_func([$controllerObj, $controllerActionMethod]);
         die;
     }
+}
+
+if($isMigrationRequest) {
+    require "migrations.php";
 }
