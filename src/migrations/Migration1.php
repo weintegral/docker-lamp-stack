@@ -10,3 +10,4 @@ class Migration1 extends BaseMigration
         $this->exec('CREATE DATABASE IF NOT EXISTS `school`');
     }
 }
+
